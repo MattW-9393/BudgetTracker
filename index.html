@@ -8,36 +8,49 @@
 </head>
 <body>
     <h1>Budget Tracker</h1>
-    <div id="incomeForm">
-        <label for="income">Add Income (Net)</label>
-        <input type="number" id="income">
-        <button>Submit</button>
-    </div>
-    <div id="billsForm">
-        <label for="billsName">Add Bills</label>
-        <input type="text" id="billsName">
-        <label for="billsFigure"></label>
-        <input type="number" id="billsFigure">
-        <button>Submit</button>
-    </div>
-    <div id="expenseForm">
-        <label for="expenseName">Add Bills</label>
-        <input type="text" id="expenseName">
-        <label for="expenseFigure"></label>
-        <input type="number" id="expenseFigure">
-        <button>Submit</button>
-    </div>
+    <table id="submissionForm">
+       <!-- <div id="incomeForm">-->
+            <tr>
+               <td> <label for="income">Add Income (Net)</label></td>
+                <td><input type="number" id="income"></td>
+                <td><button>Submit</button></td>
+            </tr>
+        <!--</div>-->
+        <!--<div id="billsForm">-->
+            <tr>
+            <td><label for="billsName">Add Bills</label></td>
+            <td><input type="text" id="billsName"></td>
+            <td><label for="billsFigure"></label>
+            <input type="number" id="billsFigure"></td>
+            <td><button>Submit</button></td>
+        </tr>
+        <!--</div>-->
+        <!--<div id="expenseForm">-->
+            <tr>
+                <td><label for="billsName">Add Expenses</label></td>
+                <td><input type="text" id="billsName"></td>
+                <td><label for="billsFigure"></label>
+                <input type="number" id="billsFigure"></td>
+                <td><button>Submit</button></td>
+            </tr>
+        <!--</div>-->
+    </table>
 
     <br>
     <hr>
     <br>
     <h2>Transactions</h2>
     <h3 id="balanceValue">Balance: £9999</h3>
-    <table>
+    <table id="transactionTable">
         <tr>
             <th>Name</th>
             <th>Type</th>
             <th>Value</th>
+        </tr>
+        <tr>
+            <td>Example</td>
+            <td>Bill</td>
+            <td>£50</td>
         </tr>
     </table>
 
