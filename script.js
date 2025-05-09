@@ -14,3 +14,15 @@ function getBalance () {
     console.log("balance is £" + getBalance)
 }
 
+function addBill(){
+    // add bill entry to transaction table
+    //subtract value from balance
+    // turn BG colour to [blue]
+}
+
+function addExpense(){
+    // add bill entry to transaction table
+    //subtract value from balance
+    // turn BG colour to [yellow]
+}
+

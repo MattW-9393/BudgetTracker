@@ -33,3 +33,8 @@ table{
     width: 7.5rem;
     text-align: center;
 }
+
+#exampleRow{
+font-style: italic;
+background-color: lightgrey;
+}
