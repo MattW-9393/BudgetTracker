@@ -2,6 +2,7 @@ let myBalance = document.getElementById("income");
 let balanceValueNum = 0;
 const transactionTable = document.getElementById("transactionTable") ;
 const entrySubmit = document.getElementById("entrySubmit")
+const clearAllBtn = document.getElementById("clearAllBtn")
 
 // Load balance from local storage on page load
 const savedBalance = localStorage.getItem("balanceValueNum");
@@ -70,6 +71,15 @@ function addBudgetEntry () {
     }
 }}
 
-
 entrySubmit.addEventListener("click", addBudgetEntry);
+
+function clearBalance(){
+    localStorage.removeItem("balanceValueNum");
+    balanceValueNum = 0;
+    document.getElementById("balanceValue").innerHTML = "Balance: £" + balanceValueNum;
+
+    console.log("All transactions cleared and balance reset to £0.00");
+}
+
+clearAllBtn.addEventListener("click", clearBalance);
 
