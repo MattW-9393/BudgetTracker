@@ -12,13 +12,7 @@ hr{
     width: 75%;
 }
 
-#billsFigure, #expenseFigure{
-    width: 4rem;
-}
 
-div{
-    padding: 0.25rem;
-}
 
 table{
     border: 1px solid black;
@@ -37,4 +31,11 @@ table{
 #exampleRow{
 font-style: italic;
 background-color: lightgrey;
+}
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px; /* Optional: Add spacing from the top */
 }

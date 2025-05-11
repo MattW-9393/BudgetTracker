@@ -42,13 +42,12 @@ function addBill(){
 }
 
 function addExpense(){
-    // add bill entry to transaction table
-    //subtract value from balance
-    // turn BG colour to [yellow]
 
     const row = transactionTable.insertRow(-1);
     const expenseName = document.getElementById("expenseName");
     const expenseFigure = document.getElementById("expenseFigure");
+
+    if (typeof expenseFigure.value === "string") {
     // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
     const cell1 = row.insertCell(0);
     const cell2 = row.insertCell(1);
@@ -62,6 +61,9 @@ function addExpense(){
 
     balanceValueNum -= expenseFigure.value;
     document.getElementById("balanceValue").innerHTML = "Balance: £" + balanceValueNum;
-    console.log(`New balance £${balanceValueNum}`);
+    console.log(`New balance £${balanceValueNum}`);}
+    else{
+        console.log("Expense value needs to be a number")
+    }
 }
 
