@@ -3,7 +3,12 @@ let balanceValueNum = 0;
 const transactionTable = document.getElementById("transactionTable") ;
 const entrySubmit = document.getElementById("entrySubmit")
 
-
+// Load balance from local storage on page load
+const savedBalance = localStorage.getItem("balanceValueNum");
+if (savedBalance !== null) {
+    balanceValueNum = parseFloat(savedBalance);
+    document.getElementById("balanceValue").innerHTML = "Balance: £" + balanceValueNum;
+}
 
 function addBudgetEntry () {
 
@@ -45,6 +50,8 @@ function addBudgetEntry () {
              row.style.backgroundColor = "#a7d7fc"
             console.log("New bills row added");
             balanceValueNum -= parseFloat(entryValue.value);
+            localStorage.removeItem("balanceValueNum");
+            localStorage.setItem("balanceValueNum", balanceValueNum);
             document.getElementById("balanceValue").innerHTML = "Balance: £" + balanceValueNum;
             console.log(`New balance £${balanceValueNum}`);
             break
@@ -53,6 +60,8 @@ function addBudgetEntry () {
             row.style.backgroundColor = "#f6fc9a"
             console.log("New expenses row added");
             balanceValueNum -= parseFloat(entryValue.value);
+            localStorage.removeItem("balanceValueNum");
+            localStorage.setItem("balanceValueNum", balanceValueNum);
             document.getElementById("balanceValue").innerHTML = "Balance: £" + balanceValueNum;
             console.log(`New balance £${balanceValueNum}`);
             break;
@@ -60,7 +69,6 @@ function addBudgetEntry () {
             console.log("There has been an error - a new item could not be added!")
     }
 }}
-
 
 
 entrySubmit.addEventListener("click", addBudgetEntry);
