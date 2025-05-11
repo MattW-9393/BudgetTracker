@@ -5,14 +5,14 @@
 
 ---
 
-### 🧩 2. **Event Handling**
+### 🧩 2. **Event Handling** ✅✅✅
 
 * **Suggestion:** Instead of using inline `onclick` handlers (e.g., `onclick="getBalance()"`), bind your events via JavaScript.
 * **Benefit:** Keeps HTML clean and separates logic from structure, making it easier to debug and scale.
 
 ---
 
-### ♻️ 3. **Code Reuse**
+### ♻️ 3. **Code Reuse** ✅✅✅
 
 * **Suggestion:** If your JavaScript has repeated logic for reading inputs or rendering rows, consider using helper functions or modular patterns.
 * **Benefit:** Reduces duplication, enhances maintainability, and makes testing easier.
@@ -26,14 +26,14 @@
 
 ---
 
-### ⚖️ 5. **Conditional Logic**
+### ⚖️ 5. **Conditional Logic** ✅✅✅
 
 * **Suggestion:** If your script uses a long `if/else` chain to distinguish between income, bills, and expenses, consider using a `switch` statement or a mapping object instead.
 * **Benefit:** Cleaner logic, easier to add new types later, and avoids deeply nested code.
 
 ---
 
-### 🧪 6. **Validation**
+### 🧪 6. **Validation** ✅✅✅
 
 * **Suggestion:** Ensure you're validating inputs in your JavaScript (e.g., prevent empty or zero-value entries).
 * **Benefit:** Prevents incorrect data and improves user experience.

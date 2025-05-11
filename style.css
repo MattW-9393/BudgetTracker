@@ -8,11 +8,16 @@ html {
     font-family: sans-serif;
 }
 
-hr{
-    width: 75%;
+h1{
+    font-size: 2.5rem;
+    margin-top: 1rem;
+}       
+    
+
+h2{
+    padding: 0.5rem;
+    padding-bottom: 2rem;
 }
-
-
 
 table{
     border: 1px solid black;
@@ -29,13 +34,25 @@ table{
 }
 
 #exampleRow{
-font-style: italic;
-background-color: lightgrey;
+    font-style: italic;
+    background-color: lightgrey;
 }
 
+/* Adjusting the form layout to make it closer together and more central */
 .form-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     margin-top: 20px; /* Optional: Add spacing from the top */
+}
+
+form .col-auto {
+    margin-bottom: 10px; /* Reduce spacing between input fields */
+}
+
+form input, form select, form button {
+    width: 100%; /* Make input fields and button take full width */
+    max-width: 300px; /* Limit the maximum width */
+    text-align: center; /* Center-align text inside inputs */
 }
