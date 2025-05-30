@@ -15,7 +15,7 @@
     <h2>Super simple budget tracking!</h2>
 
     <div class="form-container">
-        <form class="row row-cols-lg-auto g-3 align-items-center" action="">
+        <form class="row row-cols-lg-auto g-3 align-items-center" action="" id="budgetForm">
             <div class="col-auto">
                 <label class="visually-hidden" for="entryName">Name</label>
                 <input type="text" class="form-control" id="entryName" placeholder="Name">
@@ -48,17 +48,23 @@
     <h2>Transactions</h2>
     <h3 id="balanceValue"></h3>
     <table id="transactionTable">
-        <tr>
+        
+
+            <th>Date</th>
             <th>Name</th>
             <th>Type</th>
             <th>Value</th>
-        </tr>
+       
         <tr id="exampleRow">
+            <td>01/02/03</td>
             <td>Example</td>
             <td>Bill</td>
             <td>£50</td>
         </tr>
     </table>
+
+    <label for="clearAll"></label>
+    <button type="button" id="clearAllBtn" class="btn btn-danger">Clear All</button>
 
     <script src="./script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"

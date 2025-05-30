@@ -21,6 +21,8 @@ h2{
 
 table{
     border: 1px solid black;
+    width: 45rem;
+    margin-bottom: 2.5rem;
 }
 
 #submissionForm tr, th, td{

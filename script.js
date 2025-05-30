@@ -1,8 +1,12 @@
 let myBalance = document.getElementById("income");
 let balanceValueNum = 0;
-const transactionTable = document.getElementById("transactionTable") ;
+let totalNumRows = 0
+const transactionTable = document.getElementById("transactionTable");
 const entrySubmit = document.getElementById("entrySubmit")
 const clearAllBtn = document.getElementById("clearAllBtn")
+const budgetForm = document.getElementById("budgetForm")
+const entryArray = [];
+
 
 // Load balance from local storage on page load
 const savedBalance = localStorage.getItem("balanceValueNum");
@@ -17,6 +21,12 @@ function addBudgetEntry () {
     const entryName = document.getElementById("entryName");
     const entryValue = document.getElementById("entryValue");
     const entryType = document.getElementById("entryType");
+    const date = new Date().toLocaleDateString("en-GB", {
+        year: "2-digit",
+        month: "2-digit",
+        day: "2-digit"
+    });
+  
 
     if (entryName.value === "" || entryValue.value === "" || entryType.value === "") {
         alert("Please complete all fields before submitting an entry.")
@@ -28,13 +38,15 @@ function addBudgetEntry () {
     const cell1 = row.insertCell(0);
     const cell2 = row.insertCell(1);
     const cell3 = row.insertCell(2);
-    cell1.innerHTML = entryName.value;
-    cell3.innerHTML = "£" + entryValue.value;
+    const cell4 = row.insertCell(3);
+    cell1.textContent = date;
+    cell2.textContent = entryName.value;
+    cell4.textContent = "£" + entryValue.value;
 
     // switch 
     switch (entryType.value){
         case "1":
-            cell2.innerHTML = "Income";
+            cell3.innerHTML = "Income";
             row.style.backgroundColor = "#b6de92"
             console.log("New income row added");
             balanceValueNum += parseFloat(entryValue.value);
@@ -47,7 +59,7 @@ function addBudgetEntry () {
             console.log("Income added - balance is £" + getBalance);
             break
         case "2":
-            cell2.innerHTML = "Bill";
+            cell3.innerHTML = "Bill";
              row.style.backgroundColor = "#a7d7fc"
             console.log("New bills row added");
             balanceValueNum -= parseFloat(entryValue.value);
@@ -57,7 +69,7 @@ function addBudgetEntry () {
             console.log(`New balance £${balanceValueNum}`);
             break
         case "3":
-            cell2.innerHTML = "Expense";
+            cell3.innerHTML = "Expense";
             row.style.backgroundColor = "#f6fc9a"
             console.log("New expenses row added");
             balanceValueNum -= parseFloat(entryValue.value);
@@ -69,17 +81,48 @@ function addBudgetEntry () {
         default:
             console.log("There has been an error - a new item could not be added!")
     }
+
+
+
+    totalNumRows ++
+    console.log(`The total number of rows are: ${totalNumRows}`)
+
+    const entryNameValue = entryName.value;
+    const entryTypeValue = entryType.value;
+    const entryValueValue = entryValue.value;
+
+    entryArray.push([date, entryNameValue, entryTypeValue, entryValueValue]);
+
+    const stringifiedEntryArray = JSON.stringify(entryArray);
+    localStorage.setItem("Entry values", stringifiedEntryArray);
+    const savedEntries = JSON.parse(localStorage.getItem("Entry values")) || [];
+
+    console.log(stringifiedEntryArray);
+
 }}
 
 entrySubmit.addEventListener("click", addBudgetEntry);
 
 function clearBalance(){
+    const rows = transactionTable.rows
+    const exampleRow = document.getElementById("exampleRow")
+
     localStorage.removeItem("balanceValueNum");
     balanceValueNum = 0;
     document.getElementById("balanceValue").innerHTML = "Balance: £" + balanceValueNum;
+     for (let i = rows.length - 1; i >= 0; i--) {
+        const row = rows[i];
 
-    console.log("All transactions cleared and balance reset to £0.00");
+        // Check if the row contains any <th> (header) cells, skip it
+        if (row.querySelector('th')) continue;
+
+        transactionTable.deleteRow(i);
+    }
+    
+
+    console.log("All transactions cleared and balance reset to £0.00. Total number of rows reset to 0.");
 }
+
 
 clearAllBtn.addEventListener("click", clearBalance);
 
