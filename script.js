@@ -95,11 +95,12 @@ function addBudgetEntry () {
 
     const stringifiedEntryArray = JSON.stringify(entryArray);
     localStorage.setItem("Entry values", stringifiedEntryArray);
-    const savedEntries = JSON.parse(localStorage.getItem("Entry values")) || [];
 
     console.log(stringifiedEntryArray);
 
 }}
+
+const savedEntries = JSON.parse(localStorage.getItem("Entry values")) || [];
 
 entrySubmit.addEventListener("click", addBudgetEntry);
 
@@ -126,3 +127,18 @@ function clearBalance(){
 
 clearAllBtn.addEventListener("click", clearBalance);
 
+
+
+savedEntries.forEach((entry) => {
+    const row = transactionTable.insertRow(-1);
+    const cell1 = row.insertCell(0);
+    const cell2 = row.insertCell(1);
+    const cell3 = row.insertCell(2);
+    const cell4 = row.insertCell(3);
+    cell1.textContent = entry[0];
+    cell2.textContent = entry[1]
+    cell3.textContent = entry[2]
+    cell4.textContent = "£" + entry[3];
+    console.log(`New Row added with following values: ${entry[0]}, ${entry[1]}, ${entry[2]}, ${entry[3]}`)
+
+});
