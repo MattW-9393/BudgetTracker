@@ -52,3 +52,67 @@
 * **Suggestion:** Think about adding localStorage integration once your transaction data structure is solid.
 * **Benefit:** Makes your app persistent across sessions, adding real-world utility.
 
+
+------------------------------------------------------------------------------------------------------
+
+### Filtering Entries
+
+🔍 1. Decide what you want to filter by
+Start by identifying the filter types. Common examples:
+
+Type (Income, Bill, Expense)
+
+Date range
+
+Name (e.g. search for "Rent")
+
+Think about what would be most useful for your users.
+
+🎛️ 2. Add filter inputs to your UI
+You'll need to add form controls:
+
+Dropdowns, text fields, date pickers, etc.
+
+Keep them above or beside your table for visibility.
+
+🧠 3. Use allEntries as your full data source
+Your allEntries array should remain untouched — it's your full, unfiltered dataset.
+
+When a filter is applied:
+
+Create a filtered version of allEntries
+
+Use that version to re-render the table
+
+🔁 4. Set up a re-render function
+Make a reusable function that:
+
+Clears the current table rows (except the header)
+
+Loops through a given list of entries
+
+Adds them back to the table
+
+You'll call this whenever:
+
+The page loads
+
+A filter is applied
+
+Filters are cleared
+
+🚦 5. Add logic to handle filter changes
+When a user selects or types a filter:
+
+Grab the filter values from the UI
+
+Filter allEntries based on those values
+
+Pass the filtered results to your render function
+
+✅ 6. Test edge cases
+What happens when no filters are selected?
+
+What happens if no entries match?
+
+Can multiple filters be applied at once?
