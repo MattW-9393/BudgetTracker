@@ -5,7 +5,8 @@ const transactionTable = document.getElementById("transactionTable");
 const entrySubmit = document.getElementById("entrySubmit")
 const clearAllBtn = document.getElementById("clearAllBtn")
 const budgetForm = document.getElementById("budgetForm")
-const entryArray = [];
+let allEntries = JSON.parse(localStorage.getItem("Entry values")) || [];
+
 
 
 // Load balance from local storage on page load
@@ -91,16 +92,16 @@ function addBudgetEntry () {
     const entryTypeValue = entryType.value;
     const entryValueValue = entryValue.value;
 
-    entryArray.push([date, entryNameValue, entryTypeValue, entryValueValue]);
+    allEntries.push([date, entryNameValue, entryTypeValue, entryValueValue]);
 
-    const stringifiedEntryArray = JSON.stringify(entryArray);
+    const stringifiedEntryArray = JSON.stringify(allEntries);
     localStorage.setItem("Entry values", stringifiedEntryArray);
 
     console.log(stringifiedEntryArray);
 
 }}
 
-const savedEntries = JSON.parse(localStorage.getItem("Entry values")) || [];
+allEntries = JSON.parse(localStorage.getItem("Entry values")) || [];
 
 entrySubmit.addEventListener("click", addBudgetEntry);
 
@@ -129,7 +130,7 @@ clearAllBtn.addEventListener("click", clearBalance);
 
 
 
-savedEntries.forEach((entry) => {
+allEntries.forEach((entry) => {
     const row = transactionTable.insertRow(-1);
     const cell1 = row.insertCell(0);
     const cell2 = row.insertCell(1);
