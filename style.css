@@ -19,6 +19,7 @@ h2{
     padding-bottom: 2rem;
 }
 
+
 table{
     border: 1px solid black;
     width: 45rem;
@@ -57,4 +58,12 @@ form input, form select, form button {
     width: 100%; /* Make input fields and button take full width */
     max-width: 300px; /* Limit the maximum width */
     text-align: center; /* Center-align text inside inputs */
+}
+
+#dropdownMenuFilter {
+    margin-bottom: 2rem;
+}
+
+.dropdown {
+    margin-bottom: 2rem;
 }

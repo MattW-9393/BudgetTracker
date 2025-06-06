@@ -24,9 +24,9 @@
                 <label class="visually-hidden" for="entryType">Preference</label>
                 <select class="form-select" id="entryType">
                     <option selected>Type</option>
-                    <option value="1">Income</option>
-                    <option value="2">Bill</option>
-                    <option value="3">Expense</option>
+                    <option value="Income">Income</option>
+                    <option value="Bill">Bill</option>
+                    <option value="Expense">Expense</option>
                 </select>
             </div>
             <div class="col-auto">
@@ -46,7 +46,22 @@
     <hr>
     <br>
     <h2>Transactions</h2>
-    <h3 id="balanceValue"></h3>
+
+    <h3 id="balanceValue"></h3> 
+    <br>        
+    <div id="dropdownFilter">
+                <label class="" for="filterByType">Filter by Type</label>
+                <select  id="filterByType">
+                    <option selected id="typeFilterOff">All</option>
+                    <option value="Income" id="incomeFilter">Income</option>
+                    <option value="Bill" id="billFilter">Bill</option>
+                    <option value="Expense" id="expgitenseFilter">Expense</option>
+                </select>
+                <button>Filter Me</button>
+    </div>
+
+    <br>
+   
     <table id="transactionTable">
         
 
