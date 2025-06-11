@@ -32,7 +32,7 @@
             <div class="col-auto">
                 <label class="visually-hidden" for="entryValue">Value</label>
                 <div class="input-group">
-                    <input type="number" class="form-control" id="entryValue" placeholder="Value">
+                    <input type="number" class="form-control" id="entryValue" placeholder="Value" min="0">
                 </div>
             </div>
 
@@ -52,12 +52,12 @@
     <div id="dropdownFilter">
                 <label class="" for="filterByType">Filter by Type</label>
                 <select  id="filterByType">
-                    <option selected id="typeFilterOff">All</option>
+                    <option selected id="filterAll">All</option>
                     <option value="Income" id="incomeFilter">Income</option>
                     <option value="Bill" id="billFilter">Bill</option>
                     <option value="Expense" id="expgitenseFilter">Expense</option>
                 </select>
-                <button>Filter Me</button>
+                <!--<button id="filterMeBtn">Filter Me</button>-->
     </div>
 
     <br>

@@ -1,118 +1,92 @@
-### 🧱 1. **Structure and Separation of Concerns** ✅✅✅
+🧾 ToDo Review:
+✅ 1. Structure and Separation of Concerns
+✔ Done. You’re not using tables for layout. Using semantic form structure would be a nice next step, but it’s not misused.
 
-* **Suggestion:** Consider separating your form sections using semantic HTML elements (`<form>`, `<fieldset>`, etc.) rather than a `<table>`.
-* **Benefit:** Improves accessibility, readability, and is more semantically correct. Tables are intended for tabular data, not layout.
+✅ 2. Event Handling
+✔ Done. You’re using addEventListener() rather than inline onclick. Clean and scalable.
 
----
+✅ 3. Code Reuse
+➖ Partially Done.
+You created a newRow() function, but:
 
-### 🧩 2. **Event Handling** ✅✅✅
+It doesn't take an entry argument.
 
-* **Suggestion:** Instead of using inline `onclick` handlers (e.g., `onclick="getBalance()"`), bind your events via JavaScript.
-* **Benefit:** Keeps HTML clean and separates logic from structure, making it easier to debug and scale.
+It accesses entryName, entryValue, etc., directly from the form — not from passed data.
 
----
+You're still repeating logic (e.g., background coloring, value assignment).
 
-### ♻️ 3. **Code Reuse** ✅✅✅
+✅ Next step: Refactor newRow() into something like addRow(entry) that takes an entry array and handles row creation independently of form inputs.
 
-* **Suggestion:** If your JavaScript has repeated logic for reading inputs or rendering rows, consider using helper functions or modular patterns.
-* **Benefit:** Reduces duplication, enhances maintainability, and makes testing easier.
+✅ 4. State Management
+✔ Done. You’re using a single array allEntries to manage all transactions. Good structure.
 
----
+✅ 5. Conditional Logic
+✔ Done. You're using a switch statement for transaction type formatting — perfect fit for your current logic.
 
-### 🔄 4. **State Management**
+✅ 6. Validation
+✔ Done. You’re validating that inputs aren't empty before allowing a submission.
 
-* **Suggestion:** If you're keeping a list of bills/expenses/income in memory, consider using a single array or object to store and classify all transactions.
-* **Benefit:** Makes it easier to calculate totals, update entries, and persist to localStorage later.
+💡 Future enhancement: You could validate that the value is a positive number or display friendlier field-level messages.
 
----
+⚠️ 7. Accessibility & Feedback
+➖ Partially Done. You use alerts, which is a start, but no on-screen visual feedback or ARIA-friendly indicators.
 
-### ⚖️ 5. **Conditional Logic** ✅✅✅
+✅ Next step: Add a success message or inline error near the form instead of relying on alert().
 
-* **Suggestion:** If your script uses a long `if/else` chain to distinguish between income, bills, and expenses, consider using a `switch` statement or a mapping object instead.
-* **Benefit:** Cleaner logic, easier to add new types later, and avoids deeply nested code.
+✅ 8. Future-Proofing / Local Storage
+✔ Done. You're using localStorage to persist both entries and balance.
 
----
+💡 Optional improvement: abstract storage logic into helpers (saveData(), loadData()).
 
-### 🧪 6. **Validation** ✅✅✅
+🔍 Filtering Entries Checklist
+✅ 1–5: Filter Setup
+You’ve:
 
-* **Suggestion:** Ensure you're validating inputs in your JavaScript (e.g., prevent empty or zero-value entries).
-* **Benefit:** Prevents incorrect data and improves user experience.
+Added a filter dropdown
 
----
+Used allEntries as your base
 
-### 🧠 7. **Accessibility & Feedback**
+Built filtered arrays
 
-* **Suggestion:** Provide user feedback on successful entry or input errors (e.g., small messages next to fields or alerts).
-* **Benefit:** Better user experience, and makes the app feel more polished.
+Rendered filtered results
 
----
+Hooked everything into change events
 
-### 💾 8. **Future-Proofing** ✅✅✅
+💯 Great job.
 
-* **Suggestion:** Think about adding localStorage integration once your transaction data structure is solid.
-* **Benefit:** Makes your app persistent across sessions, adding real-world utility.
+⚠️ 6. Edge Case Testing
+Not clearly handled:
 
+What happens if no results match the filter?
 
-------------------------------------------------------------------------------------------------------
+Can multiple filters be added later?
 
-### Filtering Entries
+✅ Next step: Handle empty result sets with a message like "No results found."
 
-🔍 1. Decide what you want to filter by
-Start by identifying the filter types. Common examples:
+🛠️ Refactor Review
+Refactor Task	Status	Notes
+renderTable(entries) function	✅ Done	Well implemented
+Clear rows before inserting	✅ Done	Inside renderTable()
+Centralize row logic	❌ Not yet	newRow() doesn’t accept entry or return a full row — and cell3, row are undefined in other scopes
+Remove duplicate JSON.parse()	✅ Done	Good
 
-Type (Income, Bill, Expense)
+✅ TL;DR — What’s Left?
+🔧 Refactor newRow() into addRow(entry)
+js
+Copy
+Edit
+function addRow(entry) {
+  const row = transactionTable.insertRow(-1);
+  ...
+  row.style.backgroundColor = entryTypeColorMap[entry[2]] || "white";
+}
+Then call addRow(entry) inside renderTable() and forEach().
 
-Date range
+🧠 Optional Enhancements (Next-Level Polish)
+Feature	Purpose
+Success message after adding entry	UX feedback
+Handle empty filters	"No results found" UI
+Validate numbers	Prevent non-numeric input
+Add edit/delete buttons per row	Interactivity
+Extract localStorage logic	Cleaner state management
 
-Name (e.g. search for "Rent")
-
-Think about what would be most useful for your users.
-
-🎛️ 2. Add filter inputs to your UI
-You'll need to add form controls:
-
-Dropdowns, text fields, date pickers, etc.
-
-Keep them above or beside your table for visibility.
-
-🧠 3. Use allEntries as your full data source
-Your allEntries array should remain untouched — it's your full, unfiltered dataset.
-
-When a filter is applied:
-
-Create a filtered version of allEntries
-
-Use that version to re-render the table
-
-🔁 4. Set up a re-render function
-Make a reusable function that:
-
-Clears the current table rows (except the header)
-
-Loops through a given list of entries
-
-Adds them back to the table
-
-You'll call this whenever:
-
-The page loads
-
-A filter is applied
-
-Filters are cleared
-
-🚦 5. Add logic to handle filter changes
-When a user selects or types a filter:
-
-Grab the filter values from the UI
-
-Filter allEntries based on those values
-
-Pass the filtered results to your render function
-
-✅ 6. Test edge cases
-What happens when no filters are selected?
-
-What happens if no entries match?
-
-Can multiple filters be applied at once?

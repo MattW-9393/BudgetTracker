@@ -6,6 +6,7 @@ const entrySubmit = document.getElementById("entrySubmit")
 const clearAllBtn = document.getElementById("clearAllBtn")
 const budgetForm = document.getElementById("budgetForm")
 let allEntries = JSON.parse(localStorage.getItem("Entry values")) || [];
+const filterMeBtn = document.getElementById('filterMeBtn')
 
 
 
@@ -101,6 +102,51 @@ function addBudgetEntry () {
 
 }}
 
+function renderTable (arr) {
+	const rows = transactionTable.rows;
+	const entryName = document.getElementById("entryName");
+    	const entryValue = document.getElementById("entryValue");
+    	const entryType = document.getElementById("entryType");
+    	const date = new Date().toLocaleDateString("en-GB", {
+        	year: "2-digit",
+        	month: "2-digit",
+        	day: "2-digit"
+    		});
+
+	for (let i = rows.length - 1; i >= 0; i--) {
+        	const row = rows[i];
+
+        // Check if the row contains any <th> (header) cells, skip it
+        	if (row.querySelector('th')) continue;
+
+        	transactionTable.deleteRow(i);
+	}
+	
+	arr.forEach(entry => {
+
+	const row = transactionTable.insertRow(-1);
+    	const cell1 = row.insertCell(0);
+    	const cell2 = row.insertCell(1);
+    	const cell3 = row.insertCell(2);
+    	const cell4 = row.insertCell(3);
+    	cell1.textContent = entry[0]
+    	cell2.textContent = entry[1]
+	    cell3.textContent = entry[2]
+    	cell4.textContent = "£" + entry[3];
+	
+	if (entry[2] === "Income") {
+		row.style.background = "#b6de92";
+	} else if (entry[2] === "Bill") {
+		row.style.backgroundColor = "#a7d7fc"
+	} else if (entry[2] === "Expense") {
+		row.style.backgroundColor = "#f6fc9a"}
+	else {console.log("Error - No formatting added");
+}
+});
+
+};
+
+
 allEntries = JSON.parse(localStorage.getItem("Entry values")) || [];
 
 entrySubmit.addEventListener("click", addBudgetEntry);
@@ -131,80 +177,30 @@ clearAllBtn.addEventListener("click", clearBalance);
 
 function filterItems(){
 
-    const rows = transactionTable.rows;
-    for (let i = rows.length - 1; i >= 0; i--) {
-        const row = rows[i];
+   const filterByType = document.getElementById("filterByType");
 
-        // Check if the row contains any <th> (header) cells, skip it
-        if (row.querySelector('th')) continue;
+   const filterByIncome = allEntries.filter((entry) => entry[2] === "Income");
+   const filterByBills = allEntries.filter((entry) => entry[2] === "Bill");
+   const filterByExpense = allEntries.filter((entry) => entry[2] === "Expense");
+   // do I need this? --> const filterOff = allEntries    
+   
+   if (filterByType === "Income"){
+    renderTable(filterByIncome)
+   } else if ( filterByType.value === "Bill"){
+    renderTable(filterByBills)
+   } else if ( filterByType.value === "Expense"){
+    renderTable(filterByExpense)
+   } else if (filterByType.value === "All"){
+    renderTable(allEntries)
+   }
 
-        transactionTable.deleteRow(i);
-    }
+   //Better way to do this in future ----->> const filtered = (type === "All") ? allEntries : allEntries.filter(entry => entry[2] === type);
 
-    const filterByType = document.getElementById('filterByType')
-    const typeFilterOff = document.getElementById('typeFilterOff');
-    const incomeFilter = document.getElementById('incomeFilter');
-    const expenseFilter = document.getElementById('expenseFilter');
-    const billFilter = document.getElementById('billFilter')
-    
 
-    // switch statement to decide which value's to perform filter method on
-    // effectively if filterBytType value === [type] -> filter out that type, then only display objects that have that 'type' as an entry
+}
 
-    switch (filterByType.value){
-        case "Income":
-            let filterByIncome = allEntries.filter((entry) => entry[2].value === "Income");
-            
-            filterByIncome.forEach((entry) => {
-                const row = transactionTable.insertRow(-1);
-                const cell1 = row.insertCell(0);
-                const cell2 = row.insertCell(1);
-                const cell3 = row.insertCell(2);
-                const cell4 = row.insertCell(3);
-                cell1.textContent = entry[0];
-                cell2.textContent = entry[1]
-                cell3.textContent = entry[2]
-                cell4.textContent = "£" + entry[3];
-                row.style.backgroundColor = "#b6de92"
-                console.log(`Filtered row created with following values: ${entry[0]}, ${entry[1]}, ${entry[2]}, ${entry[3]}`) 
-
-            })
-            break
-        case "Bill":
-            let filterByBill = allEntries.filter((entry) => entry[2].value === "Bill");
-            
-            filterByBill.forEach((entry) => {
-                const row = transactionTable.insertRow(-1);
-                const cell1 = row.insertCell(0);
-                const cell2 = row.insertCell(1);
-                const cell3 = row.insertCell(2);
-                const cell4 = row.insertCell(3);
-                cell1.textContent = entry[0];
-                cell2.textContent = entry[1]
-                cell3.textContent = entry[2]
-                cell4.textContent = "£" + entry[3];
-                row.style.backgroundColor = "#a7d7fc"
-                console.log(`Filtered row created with following values: ${entry[0]}, ${entry[1]}, ${entry[2]}, ${entry[3]}`) 
-            })
-            break;
-        case "Expense":
-            let filterByExpense = allEntries.filter((entry) => entry[2].value === "Expense");
-            
-            filterByExpense.forEach((entry) => {
-                const row = transactionTable.insertRow(-1);
-                const cell1 = row.insertCell(0);
-                const cell2 = row.insertCell(1);
-                const cell3 = row.insertCell(2);
-                const cell4 = row.insertCell(3);
-                cell1.textContent = entry[0];
-                cell2.textContent = entry[1]
-                cell3.textContent = entry[2]
-                cell4.textContent = "£" + entry[3];
-                row.style.backgroundColor = "#a7d7fc"
-                console.log(`Filtered row created with following values: ${entry[0]}, ${entry[1]}, ${entry[2]}, ${entry[3]}`) 
-            })
-
-}}
+// filterMeBtn.addEventListener('click', filterItems);
+document.getElementById("filterByType").addEventListener("change", filterItems);
 
 
 
