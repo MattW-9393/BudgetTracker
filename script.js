@@ -30,7 +30,7 @@ function addBudgetEntry () {
     });
   
 
-    if (entryName.value === "" || entryValue.value === "" || entryType.value === "") {
+    if (entryName.value === "" || entryValue.value === "" || entryType.value === "" || isNaN(entryValue.value) === true) {
         alert("Please complete all fields before submitting an entry.")
     } else {
 
@@ -99,6 +99,8 @@ function addBudgetEntry () {
     localStorage.setItem("Entry values", stringifiedEntryArray);
 
     console.log(stringifiedEntryArray);
+    
+    alert("New entry added!");
 
 }}
 
