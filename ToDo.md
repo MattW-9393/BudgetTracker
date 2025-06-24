@@ -90,3 +90,4 @@ Validate numbers	Prevent non-numeric input
 Add edit/delete buttons per row	Interactivity
 Extract localStorage logic	Cleaner state management
 
+Update edit / delete row festure - add data index to match columns to allow inline delete/edit rows

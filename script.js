@@ -1,6 +1,6 @@
 let myBalance = document.getElementById("income");
 let balanceValueNum = 0;
-let totalNumRows = 0
+let totalNumRows = 0;
 const transactionTable = document.getElementById("transactionTable");
 const entrySubmit = document.getElementById("entrySubmit")
 const clearAllBtn = document.getElementById("clearAllBtn")
@@ -16,27 +16,6 @@ if (savedBalance !== null) {
     balanceValueNum = parseFloat(savedBalance);
     document.getElementById("balanceValue").innerHTML = "Balance: £" + balanceValueNum;
 }
-
-function addRow(entry, index) {
-  const row = transactionTable.insertRow(-1);
-  row.setAttribute("data-index", index);
-
-  const cell1 = row.insertCell(0); // date
-  const cell2 = row.insertCell(1); // name
-  const cell3 = row.insertCell(2); // type
-  const cell4 = row.insertCell(3); // value
-  const cell5 = row.insertCell(4); // edit/delete
-
-  cell1.textContent = entry[0]
-    	cell2.textContent = entry[1]
-	    cell3.textContent = entry[2]
-    	cell4.textContent = "£" + entry[3];
-        cell5.innerHTML =
-                '<button onclick="editData(this)">Edit</button>' +
-                '<button onclick="deleteData(this)">Delete</button>';
-	
-}
-
 
 function addBudgetEntry () {
 
@@ -110,11 +89,6 @@ function addBudgetEntry () {
             console.log("There has been an error - a new item could not be added!")
     }
 
-
-
-    totalNumRows ++
-    console.log(`The total number of rows are: ${totalNumRows}`)
-
     const entryNameValue = entryName.value;
     const entryTypeValue = entryType.value;
     const entryValueValue = entryValue.value;
@@ -124,7 +98,6 @@ function addBudgetEntry () {
     const stringifiedEntryArray = JSON.stringify(allEntries);
     localStorage.setItem("Entry values", stringifiedEntryArray);
 
-    console.log(stringifiedEntryArray);
     
     alert("New entry added!");
 
@@ -199,9 +172,8 @@ function clearBalance(){
 
         transactionTable.deleteRow(i);
     }
-    
 
-    console.log("All transactions cleared and balance reset to £0.00. Total number of rows reset to 0.");
+    console.log("All transactions cleared and balance reset to £0.00. Total number of rows reset to " + index + ".");
 }
 
 
