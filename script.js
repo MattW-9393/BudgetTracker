@@ -1,6 +1,6 @@
 let myBalance = document.getElementById("income");
 let balanceValueNum = 0;
-let totalNumRows = 0;
+let totalNumRows = 0
 const transactionTable = document.getElementById("transactionTable");
 const entrySubmit = document.getElementById("entrySubmit")
 const clearAllBtn = document.getElementById("clearAllBtn")
@@ -16,6 +16,27 @@ if (savedBalance !== null) {
     balanceValueNum = parseFloat(savedBalance);
     document.getElementById("balanceValue").innerHTML = "Balance: £" + balanceValueNum;
 }
+
+function addRow(entry, index) {
+  const row = transactionTable.insertRow(-1);
+  row.setAttribute("data-index", index);
+
+  const cell1 = row.insertCell(0); // date
+  const cell2 = row.insertCell(1); // name
+  const cell3 = row.insertCell(2); // type
+  const cell4 = row.insertCell(3); // value
+  const cell5 = row.insertCell(4); // edit/delete
+
+  cell1.textContent = entry[0]
+    	cell2.textContent = entry[1]
+	    cell3.textContent = entry[2]
+    	cell4.textContent = "£" + entry[3];
+        cell5.innerHTML =
+                '<button onclick="editData(this)">Edit</button>' +
+                '<button onclick="deleteData(this)">Delete</button>';
+	
+}
+
 
 function addBudgetEntry () {
 
@@ -86,6 +107,11 @@ function addBudgetEntry () {
             console.log("There has been an error - a new item could not be added!")
     }
 
+
+
+    totalNumRows ++
+    console.log(`The total number of rows are: ${totalNumRows}`)
+
     const entryNameValue = entryName.value;
     const entryTypeValue = entryType.value;
     const entryValueValue = entryValue.value;
@@ -95,12 +121,8 @@ function addBudgetEntry () {
     const stringifiedEntryArray = JSON.stringify(allEntries);
     localStorage.setItem("Entry values", stringifiedEntryArray);
 
-    // Add data-index attribute to the edit/delete buttons
-    const entryIndex = allEntries.length - 1;
-    cell5.innerHTML =
-        `<button onclick="editData(this)" data-index="${entryIndex}">Edit</button>` +
-        `<button onclick="deleteData(this)" data-index="${entryIndex}">Delete</button>`;
-
+    console.log(stringifiedEntryArray);
+    
     alert("New entry added!");
 
 }}
@@ -173,8 +195,9 @@ function clearBalance(){
 
         transactionTable.deleteRow(i);
     }
+    
 
-    console.log("All transactions cleared and balance reset to £0.00. Total number of rows reset to " + index + ".");
+    console.log("All transactions cleared and balance reset to £0.00. Total number of rows reset to 0.");
 }
 
 
@@ -230,8 +253,9 @@ function clearBalance(){
 
         transactionTable.deleteRow(i);
     }
+    
 
-    console.log("All transactions cleared and balance reset to £0.00. Total number of rows reset to " + index + ".");
+    console.log("All transactions cleared and balance reset to £0.00. Total number of rows reset to 0.");
 }
 
 
@@ -265,6 +289,38 @@ function filterItems(){
 document.getElementById("filterByType").addEventListener("change", filterItems);
 
 
+
+allEntries.forEach((entry) => {
+    const row = transactionTable.insertRow(-1);
+    const cell1 = row.insertCell(0);
+    const cell2 = row.insertCell(1);
+    const cell3 = row.insertCell(2);
+    const cell4 = row.insertCell(3);
+    const cell5 = row.insertCell(4);
+    cell1.textContent = entry[0];
+    cell2.textContent = entry[1]
+    cell3.textContent = entry[2]
+    cell4.textContent = "£" + entry[3];
+    cell5.innerHTML =
+                '<button onclick="editData(this)">Edit</button>' +
+                '<button onclick="deleteData(this)">Delete</button>';
+	
+
+    if (entry[2] === "Income"){
+        row.style.backgroundColor = "#b6de92"
+    } else if(entry[2] === "Bill"){
+        row.style.backgroundColor = "#a7d7fc"
+    } else if (entry[2] === "Expense") {
+         row.style.backgroundColor = "#f6fc9a"
+    }
+    else {
+        console.log("Colour formatting error. Check Entry type values in index.html and script.js")
+    }
+
+
+    console.log(`Row restored with following values: ${entry[0]}, ${entry[1]}, ${entry[2]}, ${entry[3]}`)
+
+});
 
 function editData(button) {
     // Get the index from data-index
