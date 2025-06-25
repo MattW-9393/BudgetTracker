@@ -46,9 +46,6 @@ function addBudgetEntry () {
     cell1.textContent = date;
     cell2.textContent = entryName.value;
     cell4.textContent = "£" + entryValue.value;
-    cell5.innerHTML =
-                '<button onclick="editData(this)">Edit</button>' +
-                '<button onclick="deleteData(this)">Delete</button>';
 
     // switch 
     switch (entryType.value){
@@ -98,7 +95,12 @@ function addBudgetEntry () {
     const stringifiedEntryArray = JSON.stringify(allEntries);
     localStorage.setItem("Entry values", stringifiedEntryArray);
 
-    
+    // Add data-index attribute to the edit/delete buttons
+    const entryIndex = allEntries.length - 1;
+    cell5.innerHTML =
+        `<button onclick="editData(this)" data-index="${entryIndex}">Edit</button>` +
+        `<button onclick="deleteData(this)" data-index="${entryIndex}">Delete</button>`;
+
     alert("New entry added!");
 
 }}
@@ -123,21 +125,20 @@ function renderTable (arr) {
         	transactionTable.deleteRow(i);
 	}
 	
-	arr.forEach(entry => {
-
-	const row = transactionTable.insertRow(-1);
-    	const cell1 = row.insertCell(0);
-    	const cell2 = row.insertCell(1);
-    	const cell3 = row.insertCell(2);
-    	const cell4 = row.insertCell(3);
-        const cell5 = row.insertCell(4)
-    	cell1.textContent = entry[0]
-    	cell2.textContent = entry[1]
-	    cell3.textContent = entry[2]
-    	cell4.textContent = "£" + entry[3];
+	arr.forEach((entry, idx) => {
+        const row = transactionTable.insertRow(-1);
+        const cell1 = row.insertCell(0);
+        const cell2 = row.insertCell(1);
+        const cell3 = row.insertCell(2);
+        const cell4 = row.insertCell(3);
+        const cell5 = row.insertCell(4);
+        cell1.textContent = entry[0]
+        cell2.textContent = entry[1]
+        cell3.textContent = entry[2]
+        cell4.textContent = "£" + entry[3];
         cell5.innerHTML =
-                '<button onclick="editData(this)">Edit</button>' +
-                '<button onclick="deleteData(this)">Delete</button>';
+            `<button onclick="editData(this)" data-index="${idx}">Edit</button>` +
+            `<button onclick="deleteData(this)" data-index="${idx}">Delete</button>`;
 	
 	if (entry[2] === "Income") {
 		row.style.background = "#b6de92";
@@ -208,74 +209,128 @@ document.getElementById("filterByType").addEventListener("change", filterItems);
 
 
 
-allEntries.forEach((entry) => {
-    const row = transactionTable.insertRow(-1);
-    const cell1 = row.insertCell(0);
-    const cell2 = row.insertCell(1);
-    const cell3 = row.insertCell(2);
-    const cell4 = row.insertCell(3);
-    const cell5 = row.insertCell(4);
-    cell1.textContent = entry[0];
-    cell2.textContent = entry[1]
-    cell3.textContent = entry[2]
-    cell4.textContent = "£" + entry[3];
-    cell5.innerHTML =
-                '<button onclick="editData(this)">Edit</button>' +
-                '<button onclick="deleteData(this)">Delete</button>';
-	
+// Fix: Ensure all Edit/Delete buttons have data-index after reload
+// Remove the old allEntries.forEach that does not set data-index
+// Instead, after loading allEntries, call renderTable(allEntries) to render the table with correct buttons
+renderTable(allEntries);
 
-    if (entry[2] === "Income"){
-        row.style.backgroundColor = "#b6de92"
-    } else if(entry[2] === "Bill"){
-        row.style.backgroundColor = "#a7d7fc"
-    } else if (entry[2] === "Expense") {
-         row.style.backgroundColor = "#f6fc9a"
-    }
-    else {
-        console.log("Colour formatting error. Check Entry type values in index.html and script.js")
+function clearBalance(){
+    const rows = transactionTable.rows
+    const exampleRow = document.getElementById("exampleRow")
+
+    localStorage.removeItem("balanceValueNum");
+    localStorage.removeItem("Entry values");
+    balanceValueNum = 0;
+    document.getElementById("balanceValue").innerHTML = "Balance: £" + balanceValueNum;
+     for (let i = rows.length - 1; i >= 0; i--) {
+        const row = rows[i];
+
+        // Check if the row contains any <th> (header) cells, skip it
+        if (row.querySelector('th')) continue;
+
+        transactionTable.deleteRow(i);
     }
 
+    console.log("All transactions cleared and balance reset to £0.00. Total number of rows reset to " + index + ".");
+}
 
-    console.log(`Row restored with following values: ${entry[0]}, ${entry[1]}, ${entry[2]}, ${entry[3]}`)
 
-});
+clearAllBtn.addEventListener("click", clearBalance);
+
+function filterItems(){
+
+   const filterByType = document.getElementById("filterByType");
+
+   const filterByIncome = allEntries.filter((entry) => entry[2] === "Income");
+   const filterByBills = allEntries.filter((entry) => entry[2] === "Bill");
+   const filterByExpense = allEntries.filter((entry) => entry[2] === "Expense");
+   // do I need this? --> const filterOff = allEntries    
+   
+   if (filterByType === "Income"){
+    renderTable(filterByIncome)
+   } else if ( filterByType.value === "Bill"){
+    renderTable(filterByBills)
+   } else if ( filterByType.value === "Expense"){
+    renderTable(filterByExpense)
+   } else if (filterByType.value === "All"){
+    renderTable(allEntries)
+   }
+
+   //Better way to do this in future ----->> const filtered = (type === "All") ? allEntries : allEntries.filter(entry => entry[2] === type);
+
+
+}
+
+// filterMeBtn.addEventListener('click', filterItems);
+document.getElementById("filterByType").addEventListener("change", filterItems);
+
+
 
 function editData(button) {
+    // Get the index from data-index
+    const idx = parseInt(button.getAttribute('data-index'));
+    if (isNaN(idx) || !allEntries[idx]) return;
+    let entry = allEntries[idx];
+    // Prompt the user to enter updated values
+    let nameInput = prompt("Enter the updated name:", entry[1]);
 
-            // Get the parent row of the clicked button
-            let row = button.parentNode.parentNode;
+    // Create a dropdown for type selection
+    let typeOptions = ["Income", "Bill", "Expense"];
+    let typeSelect = document.createElement("select");
+    typeOptions.forEach(opt => {
+        let option = document.createElement("option");
+        option.value = opt;
+        option.text = opt;
+        if (opt === entry[2]) option.selected = true;
+        typeSelect.appendChild(option);
+    });
+    // Show the dropdown in a modal-like prompt
+    let typeInput = window.prompt(
+        `Enter the updated entry type (Income, Bill, Expense):\n(Current: ${entry[2]})\nType one of: Income, Bill, Expense`,
+        entry[2]
+    );
+    // Fallback to prompt if not in browser context
+    // Prompt for value
+    let valueInput = prompt("Enter the updated value (number only):", entry[3]);
 
-            // Get the cells within the row
-            let entryNameValue = row.cells[1];
-            let entryTypeValue = row.cells[2];
-            let entryValueValue = row.cells[3];
+    // Validate and update only if all fields are provided and value is a valid number
+    if (
+        nameInput !== null &&
+        typeInput !== null &&
+        valueInput !== null &&
+        nameInput.trim() !== '' &&
+        typeInput.trim() !== '' &&
+        !isNaN(parseFloat(valueInput)) &&
+        parseFloat(valueInput) > 0
+    ) {
+        // Update balanceValueNum based on the difference
+        let oldType = entry[2];
+        let oldValue = parseFloat(entry[3]);
+        let newType = typeInput.trim();
+        let newValue = parseFloat(valueInput);
 
-            
-
-            // Prompt the user to enter updated values
-            let nameInput =
-                prompt("Enter the updated name:",
-                    entryNameValue.innerHTML);
-            let typeInput =
-                prompt("Enter the updated entry type:",
-                    entryTypeValue.innerHTML);
-            let valueInput =
-                prompt("Enter the updated mobile details:",
-                   "£" + entryValueValue.innerHTML
-                );
-
-                 
-
-            // Update the cell contents with the new values
-            entryNameValue.innerHTML = nameInput;
-            entryTypeValue.innerHTML = typeInput;
-            entryValueValue.innerHTML = valueInput;
-
-            //Save state
-            allEntries.push([date, entryNameValue, entryTypeValue, entryValueValue]);
-
-            const stringifiedEntryArray = JSON.stringify(allEntries);
-            localStorage.setItem("Entry values", stringifiedEntryArray);
-
-            console.log(stringifiedEntryArray);
+        // Remove old value from balance
+        if (oldType === "Income") {
+            balanceValueNum -= oldValue;
+        } else if (oldType === "Bill" || oldType === "Expense") {
+            balanceValueNum += oldValue;
         }
+        // Add new value to balance
+        if (newType === "Income") {
+            balanceValueNum += newValue;
+        } else if (newType === "Bill" || newType === "Expense") {
+            balanceValueNum -= newValue;
+        }
+
+        // Update entry
+        allEntries[idx][1] = nameInput.trim();
+        allEntries[idx][2] = newType;
+        allEntries[idx][3] = newValue;
+        localStorage.setItem("Entry values", JSON.stringify(allEntries));
+        localStorage.setItem("balanceValueNum", balanceValueNum);
+        document.getElementById("balanceValue").innerHTML = "Balance: £" + balanceValueNum;
+        renderTable(allEntries);
+    } else {
+        alert("Invalid input. Please enter valid values.");
+    }
+}
