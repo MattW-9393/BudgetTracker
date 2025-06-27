@@ -10,6 +10,7 @@ const filterMeBtn = document.getElementById('filterMeBtn')
 
 
 
+
 // Load balance from local storage on page load
 const savedBalance = localStorage.getItem("balanceValueNum");
 if (savedBalance !== null) {
@@ -37,18 +38,14 @@ function addBudgetEntry () {
    
     // Add new row
     const row = transactionTable.insertRow(-1);
+    row.id = Date.now(); // Set a unique ID based on the current timestamp
     const cell1 = row.insertCell(0);
     const cell2 = row.insertCell(1);
     const cell3 = row.insertCell(2);
     const cell4 = row.insertCell(3);
-    const cell5 = row.insertCell(4);
-
     cell1.textContent = date;
     cell2.textContent = entryName.value;
     cell4.textContent = "£" + entryValue.value;
-    cell5.innerHTML =
-                '<button onclick="editData(this)">Edit</button>' +
-                '<button onclick="deleteData(this)">Delete</button>';
 
     // switch 
     switch (entryType.value){
@@ -136,14 +133,10 @@ function renderTable (arr) {
     	const cell2 = row.insertCell(1);
     	const cell3 = row.insertCell(2);
     	const cell4 = row.insertCell(3);
-        const cell5 = row.insertCell(4)
     	cell1.textContent = entry[0]
     	cell2.textContent = entry[1]
 	    cell3.textContent = entry[2]
     	cell4.textContent = "£" + entry[3];
-        cell5.innerHTML =
-                '<button onclick="editData(this)">Edit</button>' +
-                '<button onclick="deleteData(this)">Delete</button>';
 	
 	if (entry[2] === "Income") {
 		row.style.background = "#b6de92";
@@ -195,7 +188,7 @@ function filterItems(){
    const filterByExpense = allEntries.filter((entry) => entry[2] === "Expense");
    // do I need this? --> const filterOff = allEntries    
    
-   if (filterByType === "Income"){
+   if (filterByType.value === "Income"){
     renderTable(filterByIncome)
    } else if ( filterByType.value === "Bill"){
     renderTable(filterByBills)
@@ -221,15 +214,10 @@ allEntries.forEach((entry) => {
     const cell2 = row.insertCell(1);
     const cell3 = row.insertCell(2);
     const cell4 = row.insertCell(3);
-    const cell5 = row.insertCell(4);
     cell1.textContent = entry[0];
     cell2.textContent = entry[1]
     cell3.textContent = entry[2]
     cell4.textContent = "£" + entry[3];
-    cell5.innerHTML =
-                '<button onclick="editData(this)">Edit</button>' +
-                '<button onclick="deleteData(this)">Delete</button>';
-	
 
     if (entry[2] === "Income"){
         row.style.backgroundColor = "#b6de92"
@@ -246,43 +234,3 @@ allEntries.forEach((entry) => {
     console.log(`Row restored with following values: ${entry[0]}, ${entry[1]}, ${entry[2]}, ${entry[3]}`)
 
 });
-
-function editData(button) {
-
-            // Get the parent row of the clicked button
-            let row = button.parentNode.parentNode;
-
-            // Get the cells within the row
-            let entryNameValue = row.cells[1];
-            let entryTypeValue = row.cells[2];
-            let entryValueValue = row.cells[3];
-
-            
-
-            // Prompt the user to enter updated values
-            let nameInput =
-                prompt("Enter the updated name:",
-                    entryNameValue.innerHTML);
-            let typeInput =
-                prompt("Enter the updated entry type:",
-                    entryTypeValue.innerHTML);
-            let valueInput =
-                prompt("Enter the updated mobile details:",
-                   "£" + entryValueValue.innerHTML
-                );
-
-                 
-
-            // Update the cell contents with the new values
-            entryNameValue.innerHTML = nameInput;
-            entryTypeValue.innerHTML = typeInput;
-            entryValueValue.innerHTML = valueInput;
-
-            //Save state
-            allEntries.push([date, entryNameValue, entryTypeValue, entryValueValue]);
-
-            const stringifiedEntryArray = JSON.stringify(allEntries);
-            localStorage.setItem("Entry values", stringifiedEntryArray);
-
-            console.log(stringifiedEntryArray);
-        }
